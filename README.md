@@ -3,5 +3,5 @@
 ![](screenshot/0001.png)
 ![](screenshot/0002.png)
 
-- Works without having KivyMD installed. (Uses it if it's installed.)
-- [Youtube Demo]()
+- Works without having KivyMD installed.
+- [Youtube Demo](https://youtu.be/h_ARi0fqnLw)
