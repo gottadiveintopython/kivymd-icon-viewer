@@ -9,7 +9,7 @@ from kivy.properties import (
 )
 from kivy.utils import get_color_from_hex
 from kivy.clock import Clock
-
+import kivyx.uix.behavior.tablikelooks
 
 colors = {
     'white': get_color_from_hex("#FFFFFF"),
@@ -40,6 +40,7 @@ Builder.load_string('''
     text: md_icons.get(self.icon, '')
 
 <IVIconButton@ButtonBehavior+IVIcon>:
+<IVTabs@KXTablikeLooksBehavior+BoxLayout>:
 
 <IconViewer>:
     orientation: 'vertical'
@@ -210,84 +211,6 @@ class IVIcon(Factory.Label):
 class IVTabHeader(Factory.ToggleButtonBehavior, Factory.Label):
     name = StringProperty()
 
-    def on_state(self, __, state):
-        if state == 'down':
-            self.parent.iv_highlight(self)
-
-
-class IVTabs(Factory.BoxLayout):
-    line_color = ColorProperty("#FFFFFF")
-    line_width = NumericProperty(1.0)
-    _next_highlight = ObjectProperty(None, allownone=True)
-
-    def __init__(self, **kwargs):
-        from kivy.graphics import InstructionGroup, Color, Line, Quad
-        self._inst_group = InstructionGroup()
-        self._inst_color = Color()
-        self._inst_line = Line()
-        self._inst_group.add(self._inst_color)
-        self._inst_group.add(self._inst_line)
-        self._current_highlight = None
-        super().__init__(**kwargs)
-        self._trigger_update_points = Clock.create_trigger(self._iv_update_points, 0)
-        trigger = Clock.create_trigger(self._iv_rebind, 0)
-        self.fbind('_next_highlight', trigger)
-        trigger()
-
-    def on_line_color(self, __, color):
-        self._inst_color.rgba = color
-
-    def on_line_width(self, __, width):
-        self._inst_line.width = width
-
-    def iv_unhighlight(self):
-        self._next_highlight = None
-
-    def iv_highlight(self, widget):
-        widget = widget.__self__
-        if widget is self._current_highlight:
-            return
-        if widget not in self.children:
-            raise ValueError(f"{widget!r} is not a child of mine.")
-        self._next_highlight = widget
-
-    def remove_widget(self, child, *args, **kwargs):
-        if child.__self__ is self._current_highlight:
-            self._next_highlight = None
-        return super().remove_widget(child, *args, **kwargs)
-
-    def _iv_rebind(self, *args):
-        trigger = self._trigger_update_points
-        current = self._current_highlight
-        next = self._next_highlight
-        if current is not None:
-            self.canvas.before.remove(self._inst_group)
-            current.unbind(pos=trigger, size=trigger)
-            self._current_highlight = None
-        if next is None:
-            self.unbind(pos=trigger, size=trigger)
-            return
-        next.bind(pos=trigger, size=trigger)
-        self._current_highlight = next
-        self.canvas.before.add(self._inst_group)
-        trigger()
-
-    def _iv_update_points(self, *args):
-        spacing = self.spacing
-        cur = self._current_highlight
-        y = self.y
-        top = self.top
-        cur_x = cur.x
-        cur_right = cur.right
-        self._inst_line.points = [
-            *self.pos,
-            cur_x - spacing, y,
-            cur_x, top,
-            cur_right, top,
-            cur_right + spacing, y,
-            self.right, y,
-        ]
-
 
 class IVBaseViewClass:
     icon = StringProperty()
@@ -295,7 +218,7 @@ class IVBaseViewClass:
 
     @property
     def rv(self):
-        return self.parent.parent
+        return self.parent.recycleview
 
     def get_data_index(self):
         return self.parent.get_view_index_at(self.center)
