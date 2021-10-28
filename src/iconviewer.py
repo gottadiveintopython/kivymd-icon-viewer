@@ -167,6 +167,7 @@ Builder.load_string('''
     viewclass: 'IVGridViewClass'
     scroll_type: ['bars', 'content']
     bar_width: 20
+    always_overscroll: False
     RecycleGridLayout:
         cols: int(self.width) // (ICON_SIZE + 20)
         size_hint_y: None
@@ -195,6 +196,7 @@ Builder.load_string('''
     viewclass: 'IVBoxViewClass'
     scroll_type: ['bars', 'content']
     bar_width: 20
+    always_overscroll: False
     RecycleBoxLayout:
         orientation: 'vertical'
         size_hint_y: None
