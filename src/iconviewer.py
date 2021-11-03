@@ -17,7 +17,7 @@ colors = {
     'green': get_color_from_hex("#00FF00"),
     'blue': get_color_from_hex("#7777FF"),
 }
-next_group = {
+next_color_name = {
     'white': 'red',
     'red': 'green',
     'green': 'blue',
@@ -29,7 +29,7 @@ Builder.load_string('''
 #:import md_icons kivymd.icon_definitions.md_icons
 #:set ICON_SIZE 64
 #:import colors iconviewer.colors
-#:import next_group iconviewer.next_group
+#:import next_color_name iconviewer.next_color_name
 #:import Factory kivy.factory.Factory
 #:import partial functools.partial
 #:import Clock kivy.clock.Clock
@@ -95,7 +95,7 @@ Builder.load_string('''
             on_enter:
                 rv_all.iv_update(
                 root._savedata,
-                filter=lambda icon, group: ti_filter.text in icon
+                filter=lambda icon, color_name: ti_filter.text in icon
                 )
             BoxLayout:
                 orientation: 'vertical'
@@ -118,7 +118,7 @@ Builder.load_string('''
                             root.iv_update(rv_all.data)
                             rv_all.iv_update(
                             root._savedata,
-                            filter=lambda icon, group: ti_filter.text in icon
+                            filter=lambda icon, color_name: ti_filter.text in icon
                             )
                             Clock.schedule_once(lambda __: setattr(self, 'focus', True), .3)
         Screen:
@@ -127,7 +127,7 @@ Builder.load_string('''
             on_enter:
                 rv_red.iv_update(
                 root._savedata,
-                filter=lambda icon, group: group == 'red'
+                filter=lambda icon, color_name: color_name == 'red'
                 )
             IVBoxRV:
                 id: rv_red
@@ -137,7 +137,7 @@ Builder.load_string('''
             on_enter:
                 rv_green.iv_update(
                 root._savedata,
-                filter=lambda icon, group: group == 'green'
+                filter=lambda icon, color_name: color_name == 'green'
                 )
             IVBoxRV:
                 id: rv_green
@@ -147,7 +147,7 @@ Builder.load_string('''
             on_enter:
                 rv_blue.iv_update(
                 root._savedata,
-                filter=lambda icon, group: group == 'blue'
+                filter=lambda icon, color_name: color_name == 'blue'
                 )
             IVBoxRV:
                 id: rv_blue
@@ -155,13 +155,13 @@ Builder.load_string('''
 
 <IVGridViewClass@IVBaseViewClass+IVIconButton>:
     font_size: ICON_SIZE
-    color: colors[root.group]
+    color: colors[root.color_name]
     size_hint_min: ICON_SIZE, ICON_SIZE
     on_press:
         print(root.icon)
-        next = next_group[root.group]
-        root.group = next
-        root.rv.data[root.get_data_index()]['group'] = next
+        next = next_color_name[root.color_name]
+        root.color_name = next
+        root.rv.data[root.get_data_index()]['color_name'] = next
 
 <IVGridRV@IVRecycleView>:
     viewclass: 'IVGridViewClass'
@@ -181,13 +181,13 @@ Builder.load_string('''
         size_hint_x: None
         width: ICON_SIZE
         font_size: ICON_SIZE
-        color: colors[root.group]
+        color: colors[root.color_name]
         icon: root.icon
         on_press:
             print(root.icon)
-            next = next_group[root.group]
-            root.group = next
-            root.rv.data[root.get_data_index()]['group'] = next
+            next = next_color_name[root.color_name]
+            root.color_name = next
+            root.rv.data[root.get_data_index()]['color_name'] = next
     Label:
         text: root.icon
         font_size: max(20, sp(15))
@@ -216,7 +216,7 @@ class IVTabHeader(Factory.ToggleButtonBehavior, Factory.Label):
 
 class IVBaseViewClass:
     icon = StringProperty()
-    group = OptionProperty('white', options=('white', 'red', 'green', 'blue'))
+    color_name = OptionProperty('white', options=('white', 'red', 'green', 'blue'))
 
     @property
     def rv(self):
@@ -231,7 +231,7 @@ class IVRecycleView(Factory.RecycleView):
     def iv_update(self, data, *, filter):
         from kivymd.icon_definitions import md_icons
         self.data = (
-            {'icon': icon, 'group': data[icon], }
+            {'icon': icon, 'color_name': data[icon], }
             for icon in md_icons if filter(icon, data[icon])
         )
 
@@ -273,12 +273,12 @@ class IconViewer(Factory.BoxLayout):
             return
         self.ids.scrmgr.current = 'blank'
         data = {
-            icon: group for icon, group in self._savedata.items()
-            if group != 'white'
+            icon: color_name for icon, color_name in self._savedata.items()
+            if color_name != 'white'
         }
         Path(self.savefile).write_text(json.dumps(data), encoding='utf8')
 
     def iv_update(self, rv_data):
         self._savedata.update(
-            {datum['icon']: datum['group'] for datum in rv_data}
+            {datum['icon']: datum['color_name'] for datum in rv_data}
         )

@@ -1,6 +1,6 @@
 '''
 KXTablikeLooksBehavior
-==============
+======================
 
 A mix-in class that adds tab-like graphical representation to BoxLayout.
 '''
