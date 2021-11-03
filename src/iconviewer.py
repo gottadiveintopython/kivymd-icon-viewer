@@ -37,7 +37,7 @@ Builder.load_string('''
 
 <IVIcon>:
     font_name: 'Icons'
-    text: md_icons.get(self.icon, '')
+    text: md_icons[self.icon]
 
 <IVIconButton@ButtonBehavior+IVIcon>:
 <IVTabs@KXTablikeLooksBehavior+BoxLayout>:
@@ -207,7 +207,7 @@ Builder.load_string('''
 
 
 class IVIcon(Factory.Label):
-    icon = StringProperty()
+    icon = StringProperty('blank')
 
 
 class IVTabHeader(Factory.ToggleButtonBehavior, Factory.Label):
@@ -215,7 +215,7 @@ class IVTabHeader(Factory.ToggleButtonBehavior, Factory.Label):
 
 
 class IVBaseViewClass:
-    icon = StringProperty()
+    icon = StringProperty('blank')
     color_name = OptionProperty('white', options=('white', 'red', 'green', 'blue'))
 
     @property
