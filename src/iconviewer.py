@@ -161,7 +161,7 @@ Builder.load_string('''
         print(root.icon)
         next = next_color_name[root.color_name]
         root.color_name = next
-        root.rv.data[root.get_data_index()]['color_name'] = next
+        root.rv.data[root.get_view_index()]['color_name'] = next
 
 <IVGridRV@IVRecycleView>:
     viewclass: 'IVGridViewClass'
@@ -187,7 +187,7 @@ Builder.load_string('''
             print(root.icon)
             next = next_color_name[root.color_name]
             root.color_name = next
-            root.rv.data[root.get_data_index()]['color_name'] = next
+            root.rv.data[root.get_view_index()]['color_name'] = next
     Label:
         text: root.icon
         font_size: max(20, sp(15))
@@ -222,7 +222,7 @@ class IVBaseViewClass:
     def rv(self):
         return self.parent.recycleview
 
-    def get_data_index(self):
+    def get_view_index(self):
         return self.parent.get_view_index_at(self.center)
 Factory.register('IVBaseViewClass', cls=IVBaseViewClass)
 
