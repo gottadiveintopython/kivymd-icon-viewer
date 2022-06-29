@@ -49,13 +49,13 @@ Builder.load_string('''
         tab_line_width: 2
         IVTabHeader:
             group: 'tab'
-            name: 'all'
+            tab_name: 'all'
             text: 'All'
             font_size: 20
             on_state: if args[1] == 'down': scrmgr.current = 'all'
         IVTabHeader:
             group: 'tab'
-            name: 'red'
+            tab_name: 'red'
             color: colors['red']
             font_name: 'Icons'
             font_size: 30
@@ -63,7 +63,7 @@ Builder.load_string('''
             on_state: if args[1] == 'down': scrmgr.current = 'red'
         IVTabHeader:
             group: 'tab'
-            name: 'green'
+            tab_name: 'green'
             color: colors['green']
             font_name: 'Icons'
             font_size: 30
@@ -71,7 +71,7 @@ Builder.load_string('''
             on_state: if args[1] == 'down': scrmgr.current = 'green'
         IVTabHeader:
             group: 'tab'
-            name: 'blue'
+            tab_name: 'blue'
             color: colors['blue']
             font_name: 'Icons'
             font_size: 30
@@ -204,7 +204,7 @@ class IVIcon(Factory.Label):
 
 
 class IVTabHeader(Factory.ToggleButtonBehavior, Factory.Label):
-    name = StringProperty()
+    tab_name = StringProperty()
 
 
 class IVBaseViewClass:
@@ -236,7 +236,7 @@ class IconViewer(Factory.BoxLayout):
         self.iv_load()
         initial_tab = next(iter(self._savedata.values()), 'all')
         for tab in self.ids.tabs.children:
-            if tab.name == initial_tab:
+            if tab.tab_name == initial_tab:
                 tab.state = 'down'
                 break
         
