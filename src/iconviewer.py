@@ -241,10 +241,7 @@ class IconViewer(Factory.BoxLayout):
 
     def on_kv_post(self, *args, **kwargs):
         self.iv_load()
-        try:
-            initial_tab = next(iter(self._savedata.values()))
-        except StopIteration:
-            initial_tab = 'all'
+        initial_tab = next(iter(self._savedata.values()), 'all')
         for tab in self.ids.tabs.children:
             if tab.name == initial_tab:
                 tab.state = 'down'
