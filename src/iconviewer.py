@@ -4,8 +4,10 @@ from kivy.lang import Builder
 from kivy.factory import Factory
 from kivy.properties import StringProperty, OptionProperty
 from kivy.utils import get_color_from_hex
+from kivymd.icon_definitions import md_icons
 import kivyx.uix.behavior.tablikelooks
 
+ICON_SIZE = 64
 colors = {
     'white': get_color_from_hex("#FFFFFF"),
     'red': get_color_from_hex("#FF5555"),
@@ -20,9 +22,17 @@ next_color_name = {
 }
 
 
+
+def create_texture_from_text(**label_kwargs):
+    from kivy.core.text import Label as CoreLabel
+    label = CoreLabel(**label_kwargs)
+    label.refresh()
+    return label.texture
+
+
 Builder.load_string('''
 #:import md_icons kivymd.icon_definitions.md_icons
-#:set ICON_SIZE 64
+#:import ICON_SIZE iconviewer.ICON_SIZE
 #:import colors iconviewer.colors
 #:import next_color_name iconviewer.next_color_name
 #:import Clock kivy.clock.Clock
@@ -32,7 +42,9 @@ Builder.load_string('''
     font_name: 'Icons'
     text: md_icons[self.icon]
 
-<IVIconButton@ButtonBehavior+IVIcon>:
+<IVIconButton>:
+    texture: self.textures[self.icon]
+
 <IVTabs@KXTablikeLooksBehavior+BoxLayout>:
 
 <IconViewer>:
@@ -147,7 +159,6 @@ Builder.load_string('''
 
 
 <IVGridViewClass@IVBaseViewClass+IVIconButton>:
-    font_size: ICON_SIZE
     color: colors[root.color_name]
     size_hint_min: ICON_SIZE, ICON_SIZE
     on_press:
@@ -173,7 +184,6 @@ Builder.load_string('''
     IVIconButton:
         size_hint_x: None
         width: ICON_SIZE
-        font_size: ICON_SIZE
         color: colors[root.color_name]
         icon: root.icon
         on_press:
@@ -200,6 +210,16 @@ Builder.load_string('''
 
 
 class IVIcon(Factory.Label):
+    icon = StringProperty('blank')
+
+
+class IVIconButton(Factory.ButtonBehavior, Factory.Image):
+    class Textures(dict):
+        def __missing__(self, key):
+            self[key] = texture = create_texture_from_text(font_name='Icons', font_size=ICON_SIZE, text=md_icons[key])
+            return texture
+    textures = Textures()
+    del Textures
     icon = StringProperty('blank')
 
 
