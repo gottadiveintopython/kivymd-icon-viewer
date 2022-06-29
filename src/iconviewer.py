@@ -1,14 +1,9 @@
 __all__ = ('IconViewer', )
 
-from functools import lru_cache
 from kivy.lang import Builder
 from kivy.factory import Factory
-from kivy.properties import (
-    StringProperty, OptionProperty, ColorProperty, NumericProperty,
-    ObjectProperty,
-)
+from kivy.properties import StringProperty, OptionProperty
 from kivy.utils import get_color_from_hex
-from kivy.clock import Clock
 import kivyx.uix.behavior.tablikelooks
 
 colors = {
@@ -30,8 +25,6 @@ Builder.load_string('''
 #:set ICON_SIZE 64
 #:import colors iconviewer.colors
 #:import next_color_name iconviewer.next_color_name
-#:import Factory kivy.factory.Factory
-#:import partial functools.partial
 #:import Clock kivy.clock.Clock
 #:import NoTransition kivy.uix.screenmanager.NoTransition
 
