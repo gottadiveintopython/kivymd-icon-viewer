@@ -52,8 +52,8 @@ Builder.load_string('''
         height: dp(40)
         spacing: 20
         padding: 20, 0
-        line_color: .2, .2, .2, 1
-        line_width: 2
+        tab_line_color: .2, .2, .2, 1
+        tab_line_width: 2
         IVTabHeader:
             group: 'tab'
             name: 'all'
