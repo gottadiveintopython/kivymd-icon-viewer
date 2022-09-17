@@ -12,8 +12,6 @@ python = "^3.8"
 
 
 [tool.poetry.group.dev.dependencies]
-Kivy = "^2.1.0"
-kivymd = "^1.0.2"
 
 [tool.poetry.scripts]
 iconviewer = 'kivymd_icon_viewer:launch'
