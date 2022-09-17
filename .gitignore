@@ -7,3 +7,4 @@ bin/
 *.mp3
 /temp
 Pipfile.lock
+poetry.lock
