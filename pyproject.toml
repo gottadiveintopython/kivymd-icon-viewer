@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "kivymd-icon-viewer"
-version = "0.1.0"
+version = "0.1.1"
 description = "KivyMD Icon Viewer"
 authors = ["Nattōsai Mitō <flow4re2c@gmail.com>"]
 license = "MIT"
